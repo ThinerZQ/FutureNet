@@ -27,12 +27,9 @@ public final class Route {
         int destination = Integer.parseInt(conditions[1]);
         String[] requirePathString = conditions[2].split("\\|");
         int[] requirePassedVertex = new int[requirePathString.length];
-        int[][] adjacentMatrix = buildAdjacentMatrix(edges, edgeNumber, vertexNumber);
-        int dist[] = new int[vertexNumber];
-        int prev[] = new int[vertexNumber];
-        for (String s : requirePathString){
-            System.out.println(s);
-        }
+        //int dist[] = new int[vertexNumber];
+        //int prev[] = new int[vertexNumber];
+        // int[][] adjacentMatrix = buildAdjacentMatrix(edges, edgeNumber, vertexNumber);
         for (int i = 0; i < requirePassedVertex.length; i++) {
             if (i== requirePassedVertex.length-1){
                 requirePathString[i]=requirePathString[i].substring(0,requirePathString[i].length()-1);
@@ -41,33 +38,12 @@ public final class Route {
         }
 
 
+        Dijkstra dijkstra = new Dijkstra(edges,edgeNumber,vertexNumber,origin);
+        dijkstra.computePath(dijkstra.getOrigin());
+        dijkstra.printPathInfo(requirePassedVertex);
 
 
 
-
-        System.out.print("输出图信息：");
-        System.out.println("顶点数：" + vertexNumber + "， 边数：" + edgeNumber);
-        System.out.println("邻接矩阵");
-        for (int[] a : adjacentMatrix) {
-            for (int b : a) {
-                System.out.print(b + " ");
-            }
-            System.out.println();
-        }
-
-        dijkstra(origin, adjacentMatrix, dist, prev);
-        Map<Integer,ArrayList<String>> map = new HashMap<Integer, ArrayList<String>>();
-        savePath(origin,dist,prev,requirePassedVertex,map);
-
-        for (Map.Entry<Integer,ArrayList<String>> entry  : map.entrySet()){
-            int pass = entry.getKey();
-            ArrayList<String> path = entry.getValue();
-            for (int i = 0; i < path.size(); i++) {
-                String t = path.get(0);
-                String height = path.get(1);
-
-            }
-        }
 
 
         return "hello world!";
@@ -189,24 +165,5 @@ public final class Route {
         return set.size();
     }
 
-    public static int[][] buildAdjacentMatrix(String[] edges, int edgeNumber, int vertexNumber) {
-
-        int max = Integer.MAX_VALUE;
-        int[][] adjacentMatrix = new int[vertexNumber][vertexNumber];
-
-        for (int i = 0; i < adjacentMatrix.length; i++) {
-            for (int j = 0; j < adjacentMatrix.length; j++) {
-                if (i == j)
-                    adjacentMatrix[i][j] = 0;
-                else
-                    adjacentMatrix[i][j] = max;
-            }
-        }
-        for (String edge : edges) {
-            String[] vertexes = edge.split(",");
-            adjacentMatrix[Integer.parseInt(vertexes[1])][Integer.parseInt(vertexes[2])] = Integer.parseInt(vertexes[3]);
-        }
-        return adjacentMatrix;
-    }
 
 }
